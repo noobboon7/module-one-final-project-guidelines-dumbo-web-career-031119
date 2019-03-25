@@ -1,4 +1,4 @@
 class Gig < ActiveRecord::Base
-belongs_to :artists
-belongs_to :venues 
+belongs_to :artist
+belongs_to :venue 
 end
