@@ -22,7 +22,6 @@ ActiveRecord::Schema.define(version: 20190325201600) do
   create_table "gigs", force: :cascade do |t|
     t.integer  "artist_id"
     t.integer  "venue_id"
-    t.string   "events"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -30,8 +29,8 @@ ActiveRecord::Schema.define(version: 20190325201600) do
   create_table "venues", force: :cascade do |t|
     t.string   "name"
     t.string   "location"
-    t.datetime "open"
-    t.datetime "close"
+    t.string   "open"
+    t.string   "close"
     t.float    "prices"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

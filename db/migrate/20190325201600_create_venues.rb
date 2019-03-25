@@ -3,8 +3,8 @@ class CreateVenues < ActiveRecord::Migration[5.0]
     create_table :venues do |t|
       t.string :name
       t.string :location
-      t.datetime :open
-      t.datetime :close
+      t.string :open
+      t.string :close
       t.float :prices
 
       t.timestamps
