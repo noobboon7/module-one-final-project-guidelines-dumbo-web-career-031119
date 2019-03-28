@@ -141,11 +141,9 @@ def update_profile
       bio = $prompt.ask('What do you want your fan to know about you?') do |t|
         t.required true
       end
-      
-      bio.update
+      @new_artist.update(bio: bio)
     when 3
       user_menu
-
   end
 
 end
