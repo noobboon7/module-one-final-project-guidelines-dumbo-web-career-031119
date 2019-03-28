@@ -2,7 +2,7 @@ class Artist < ActiveRecord::Base
 has_many :gigs
 has_many :venues, through: :gigs
 
-attr_accessor :bio, :name
+# attr_accessor :bio, :name
 
 
   def artist_gigs

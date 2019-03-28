@@ -52,7 +52,8 @@ end
 def create_user
   name = $prompt.ask('What is your name?', default: "artist_name")
   puts "Welcome #{name}!"
-  @new_artist = Artist.create(name: "#{name}", bio: "bio here")
+  @new_artist = Artist.create(name: name, bio: "bio here")
+  # binding.pry
 end
 # drop down menu that give the user options to Create a gig, Update+delete gig, and exit app
 
@@ -132,14 +133,15 @@ def update_profile
         q.required true
       end
       # binding.pry
-      update_name = Artist.find_by(id: @new_artist.id)
-      update_name.update(name: "#{name}")
-      update_name.save
+      # update_name = Artist.find_by(id: @new_artist.id)
+      # binding.pry
+      @new_artist.update(name: name)
+      # update_name.save
     when 2
       bio = $prompt.ask('What do you want your fan to know about you?') do |t|
         t.required true
       end
-      # bio.find_by(bio: )
+      
       bio.update
     when 3
       user_menu
