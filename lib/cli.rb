@@ -48,7 +48,7 @@ ____________¶¶¶¶______¶____________¶¶¶¶¶¶
 ______¶¶¶¶¶¶_¶¶¶_¶¶¶¶¶
 ¶¶¶¶¶¶_______¶¶¶"
 end
-# user enters artist sudo name and is created in our database
+# user enters artist sudo name and is created` in our database
 def create_user
   name = $prompt.ask('What is your name?', default: "artist_name")
   puts "Welcome #{name}!"
@@ -56,19 +56,23 @@ def create_user
 end
 # drop down menu that give the user options to Create a gig, Update+delete gig, and exit app
 def user_menu
+
+  choose = $prompt.select('choose from the menu below', %w(list_of_venues your_venues update_venue delete_venue exit ))
   system "clear"
-choose = $prompt.select('choose from the menu below', %w(list_of_venues your_venues exit ))
-
-  case choose
-
-  when "list_of_venues"
-    venue_selection
-  when "your_venues"
-    @new_artist.artist_venues
-
-  when "exit"
-    close_app
+  while choose != "exit"
+    if  choose == "list_of_venues"
+      venue_selection
+      book
+    elsif choose == "your_venues"
+      puts @new_artist.artist_venues
+      user_menu
+    elsif choose == "update_venue"
+      update_gig
+    elsif choose == "delete_venue"
+      delete_gig
+    end
   end
+close_app
 end
 
 def venue_selection
@@ -79,7 +83,13 @@ def venue_selection
       end
     end
 end
-
+# def venue_hash
+#   hash = {}
+#   @new_artist.venues.each do |venue|
+#     hash[venue] = venue.name
+#   end
+#   hash
+# end
 def book
   system "clear"
   venue_info = Venue.where(name: @selected_venue.name)
@@ -104,26 +114,37 @@ def book
   end
 
 end
+def update_gig
+
+  to_update = $prompt.select('update a show', @selected_venue.name)
+  # binding.pry
+  @selected_venue.update(name: to_update)
+
+
+  user_menu
+end
+
+def delete_gig
+  # finds a specific gig and then destroy
+  to_delete = $prompt.select('Cancel a show', @selected_venue.name)
+  to_delete.destroy
+
+  user_menu
+end
+
 def close_app
   abort("See you at the show!")
 end
-# create_new_event(booking)
-def create_new_event(book)
-  if booking == true
-     puts "created"
-    Gig.create(artist_id: self.id, venue_id:location.id)
-    Gig.save
-  end
-end
-
-
-
-
+ # create_new_event(book)
+#   if booking == true
+#      puts "created"
+#     Gig.create(artist_id: self.id, venue_id:location.id)
+#     Gig.save
+#   end
 
  def run_program
    greet
    create_user
    user_menu
    book
-
  end
