@@ -2,7 +2,7 @@
 
 # greet new user with a desciption of the app
 def greet
-  $prompt = TTY::Prompt.new
+  $prompt = TTY::Prompt.new(symbols: {pointer: '>'}, cycle: true)
   system "clear"
 
   puts 'Welcome to gig_finder, the best resource for finding your next gig!'
@@ -52,22 +52,24 @@ end
 def create_user
   name = $prompt.ask('What is your name?', default: "artist_name")
   puts "Welcome #{name}!"
-  @new_artist = Artist.create(name: name)
+  @new_artist = Artist.create(name: "#{name}", bio: "bio here")
 end
 # drop down menu that give the user options to Create a gig, Update+delete gig, and exit app
+
+
 def user_menu
 
-  choose = $prompt.select('choose from the menu below', %w(list_of_venues your_venues update_venue delete_venue exit ))
+  choose = $prompt.select('choose from the menu below', %w(list_of_venues your_venues update_profile delete_venue exit ))
   system "clear"
   while choose != "exit"
     if  choose == "list_of_venues"
       venue_selection
       book
     elsif choose == "your_venues"
-      puts @new_artist.artist_venues
+      puts @new_artist.artist_gigs
       user_menu
-    elsif choose == "update_venue"
-      update_gig
+    elsif choose == "update_profile"
+      update_profile
     elsif choose == "delete_venue"
       delete_gig
     end
@@ -114,19 +116,46 @@ def book
   end
 
 end
-def update_gig
+def update_profile
+  ## Asking user what they'd like to update and store value of selection into
+  ## variable to_update
+  to_update = $prompt.select('update profile') do |menu|
+                menu.choice "artist name", 1
+                menu.choice "bio", 2
+                menu.choice "exit", 3
+              end
+  # ask's the user for information about themselves to update
+  case to_update
 
-  to_update = $prompt.select('update a show', @selected_venue.name)
-  # binding.pry
-  @selected_venue.update(name: to_update)
+    when 1
+      name = $prompt.ask("What is your artist?", default: @new_artist.name) do |q|
+        q.required true
+      end
+      # binding.pry
+      update_name = Artist.find_by(id: @new_artist.id)
+      update_name.update(name: "#{name}")
+      update_name.save
+    when 2
+      bio = $prompt.ask('What do you want your fan to know about you?') do |t|
+        t.required true
+      end
+      # bio.find_by(bio: )
+      bio.update
+    when 3
+      user_menu
 
+  end
 
-  user_menu
 end
+  # @new_artist.update( )
+
 
 def delete_gig
   # finds a specific gig and then destroy
-  to_delete = $prompt.select('Cancel a show', @selected_venue.name)
+  to_delete = $prompt.select('Cancel a show', @selected_venue).each do |t|
+    t.choice
+  end
+
   to_delete.destroy
 
   user_menu
