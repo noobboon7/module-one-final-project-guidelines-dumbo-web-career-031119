@@ -6,8 +6,8 @@ has_many :venues, through: :gigs
 
 
   def artist_gigs
-    self.gigs.map do |gig|
-      gig.venue.name 
+    self.gigs.each do |gig|
+    puts gig.venue.name
     end
 
   end

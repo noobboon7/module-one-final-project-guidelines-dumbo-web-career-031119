@@ -2,7 +2,7 @@
 
 # greet new user with a desciption of the app
 def greet
-  $prompt = TTY::Prompt.new(symbols: {pointer: '>'}, cycle: true)
+  $prompt = TTY::Prompt.new(symbols: {pointer: '>'})
   system "clear"
 
   puts 'Welcome to gig_finder, the best resource for finding your next gig!'
@@ -67,7 +67,7 @@ def user_menu
       venue_selection
       book
     elsif choose == "your_venues"
-      puts @new_artist.artist_gigs
+       @new_artist.artist_gigs
       user_menu
     elsif choose == "update_profile"
       update_profile
@@ -153,12 +153,13 @@ def delete_gig
     menu.choice "shows", 1
     menu.choice "exit", 2
   end
-  binding.pry
+  # binding.pry
   case to_delete
 
   when 1
+     @new_artist.reload
     gigs = Gig.where(artist_id: @new_artist)
-      gigs.destroy_all 
+      gigs.destroy_all
 
     when 2
       user_menu
