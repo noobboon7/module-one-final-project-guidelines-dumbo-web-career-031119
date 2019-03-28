@@ -132,11 +132,8 @@ def update_profile
       name = $prompt.ask("What is your artist?", default: @new_artist.name) do |q|
         q.required true
       end
-      # binding.pry
-      # update_name = Artist.find_by(id: @new_artist.id)
-      # binding.pry
       @new_artist.update(name: name)
-      # update_name.save
+
     when 2
       bio = $prompt.ask('What do you want your fan to know about you?') do |t|
         t.required true
@@ -147,18 +144,25 @@ def update_profile
   end
 
 end
-  # @new_artist.update( )
-
 
 def delete_gig
   # finds a specific gig and then destroy
-  to_delete = $prompt.select('Cancel a show', @selected_venue).each do |t|
-    t.choice
+  # binding.pry
+
+  to_delete = $prompt.select('Cancel a show',) do |menu|
+    menu.choice "shows", 1
+    menu.choice "exit", 2
   end
+  binding.pry
+  case to_delete
 
-  to_delete.destroy
+  when 1
+    gigs = Gig.where(artist_id: @new_artist)
+      gigs.destroy_all 
 
-  user_menu
+    when 2
+      user_menu
+  end
 end
 
 def close_app
